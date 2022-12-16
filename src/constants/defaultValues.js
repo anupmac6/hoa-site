@@ -19,12 +19,13 @@ export const localeOptions = [
 ];
 
 export const firebaseConfig = {
-  apiKey: 'AIzaSyBBksq-Asxq2M4Ot-75X19IyrEYJqNBPcg',
-  authDomain: 'gogo-react-login.firebaseapp.com',
-  databaseURL: 'https://gogo-react-login.firebaseio.com',
-  projectId: 'gogo-react-login',
-  storageBucket: 'gogo-react-login.appspot.com',
-  messagingSenderId: '216495999563',
+  apiKey: 'AIzaSyCHS3BKN-KD1PeuyCU9YBUX3avJAyLQZFg',
+  authDomain: 'hoa-webapp.firebaseapp.com',
+  projectId: 'hoa-webapp',
+  storageBucket: 'hoa-webapp.appspot.com',
+  messagingSenderId: '190300876005',
+  appId: '1:190300876005:web:052f1072bec19b7e01b80c',
+  measurementId: 'G-4KV11EP11T',
 };
 
 export const adminRoot = '/app';
@@ -43,7 +44,7 @@ export const currentUser = {
 export const themeColorStorageKey = '__theme_selected_color';
 export const isMultiColorActive = true;
 export const defaultColor = 'light.purplemonster';
-export const isDarkSwitchActive = true;
+export const isDarkSwitchActive = false;
 export const defaultDirection = 'ltr';
 export const themeRadiusStorageKey = '__theme_radius';
 export const isAuthGuardActive = true;

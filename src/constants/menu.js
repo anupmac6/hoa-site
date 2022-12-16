@@ -17,7 +17,7 @@ const data = [
   {
     id: 'secondmenu',
     icon: 'iconsminds-three-arrow-fork',
-    label: 'menu.second-menu',
+    label: 'Admin',
     to: `${adminRoot}/second-menu`,
     // roles: [UserRole.Admin, UserRole.Editor],
     subs: [
