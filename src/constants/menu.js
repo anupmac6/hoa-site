@@ -3,8 +3,8 @@ import { adminRoot } from './defaultValues';
 const data = [
   {
     id: 'gogo',
-    icon: 'iconsminds-air-balloon-1',
-    label: 'menu.gogo',
+    icon: 'iconsminds-home-1',
+    label: 'Home',
     to: `${adminRoot}/home`,
     subs: [
       {
@@ -16,12 +16,12 @@ const data = [
   },
   {
     id: 'admin',
-    icon: 'iconsminds-three-arrow-fork',
+    icon: 'simple-icon-lock',
     label: 'Admin',
     to: `${adminRoot}/admin`,
     subs: [
       {
-        icon: 'simple-icon-paper-plane',
+        icon: 'simple-icon-people',
         label: 'Registration Queue',
         to: `${adminRoot}/admin/registrations`,
       },
