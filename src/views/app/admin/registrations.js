@@ -41,7 +41,6 @@ const Registrations = ({ match }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [totalItemCount] = useState(0);
   const [totalPage] = useState(1);
-  const [search, setSearch] = useState('');
   const [selectedItems, setSelectedItems] = useState([]);
   const [items, setItems] = useState([]);
   const [lastChecked, setLastChecked] = useState(null);
@@ -49,37 +48,36 @@ const Registrations = ({ match }) => {
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedPageSize, selectedOrderOption]);
+  const fetchData = async () => {
+    const customers = await firestore
+      .collection('customers')
+      .where('isActive', '==', true)
+      .where('isApproved', '==', false)
+      .get();
 
-  useEffect(() => {
-    async function fetchData() {
-      const customers = await firestore
-        .collection('customers')
-        .where('isActive', '==', true)
-        .where('isApproved', '==', false)
-        .get();
-
-      if (!customers.empty) {
-        const customersDoc = [];
-        customers.docs.forEach((doc) => {
-          const docData = doc.data();
-          customersDoc.push({
-            id: doc.id,
-            ...docData,
-          });
+    if (!customers.empty) {
+      const customersDoc = [];
+      customers.docs.forEach((doc) => {
+        const docData = doc.data();
+        customersDoc.push({
+          id: doc.id,
+          ...docData,
         });
+      });
 
-        setItems(customersDoc);
-        setSelectedItems([]);
-        setIsLoaded(true);
-        console.log(customersDoc);
-      } else {
-        setItems([]);
-        setSelectedItems([]);
-        setIsLoaded(true);
-      }
+      setItems(customersDoc);
+      setSelectedItems([]);
+      setIsLoaded(true);
+      console.log(customersDoc);
+    } else {
+      setItems([]);
+      setSelectedItems([]);
+      setIsLoaded(true);
     }
+  };
+  useEffect(() => {
     fetchData();
-  }, [selectedPageSize, currentPage, selectedOrderOption, search]);
+  }, []);
 
   const onCheckItem = (event, id) => {
     if (
@@ -129,9 +127,50 @@ const Registrations = ({ match }) => {
     return false;
   };
 
+  const saveHandler = async (action) => {
+    console.log(action, selectedItems);
+
+    if (selectedItems.length) {
+      setIsLoaded(false);
+      const batch = firestore.batch();
+      let status = '';
+      let isApproved = false;
+      let isActive = true;
+      if (action === 'approve') {
+        status = 'approved';
+        isApproved = true;
+      } else if (action === 'hold') {
+        status = 'on hold';
+      } else if (action === 'reject') {
+        status = 'rejected';
+        isActive = false;
+      }
+      selectedItems.forEach((selectedItem) => {
+        const doc = firestore.collection('customers').doc(selectedItem);
+
+        batch.update(doc, {
+          isApproved,
+          status,
+          isActive,
+        });
+      });
+
+      await batch.commit().catch(() => {
+        setIsLoaded(true);
+      });
+
+      fetchData();
+    }
+  };
+
   const onContextMenuClick = (e, data) => {
     console.log('onContextMenuClick - selected items', selectedItems);
     console.log('onContextMenuClick - action : ', data.action);
+    saveHandler(data.action);
+  };
+
+  const onSelectedItemsClick = (data) => {
+    saveHandler(data);
   };
 
   const onContextMenu = (e, data) => {
@@ -165,6 +204,7 @@ const Registrations = ({ match }) => {
           displayMode={displayMode}
           changeDisplayMode={setDisplayMode}
           handleChangeSelectAll={handleChangeSelectAll}
+          onSelectedItemsClick={onSelectedItemsClick}
           changeOrderBy={(column) => {
             setSelectedOrderOption(
               orderOptions.find((x) => x.column === column)
@@ -179,11 +219,6 @@ const Registrations = ({ match }) => {
           endIndex={endIndex}
           selectedItemsLength={selectedItems ? selectedItems.length : 0}
           itemsLength={items ? items.length : 0}
-          onSearchKey={(e) => {
-            if (e.key === 'Enter') {
-              setSearch(e.target.value.toLowerCase());
-            }
-          }}
           orderOptions={orderOptions}
           pageSizes={pageSizes}
           toggleModal={() => setModalOpen(!modalOpen)}

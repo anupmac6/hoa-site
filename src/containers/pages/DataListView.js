@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Card, CustomInput, Badge } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import classnames from 'classnames';
@@ -6,6 +6,23 @@ import { ContextMenuTrigger } from 'react-contextmenu';
 import { Colxx } from 'components/common/CustomBootstrap';
 
 const DataListView = ({ product, isSelect, collect, onCheckItem }) => {
+  const pillColor = useMemo(() => {
+    if (product.status === 'waiting approval') {
+      return 'warning';
+    }
+    if (product.status === 'on hold') {
+      return 'danger';
+    }
+
+    if (product.status === 'rejected') {
+      return 'dark';
+    }
+
+    if (product.status === 'approved') {
+      return 'success';
+    }
+    return 'info';
+  }, [product]);
   return (
     <Colxx xxs="12" className="mb-3">
       <ContextMenuTrigger id="menu_id" data={product.id} collect={collect}>
@@ -22,15 +39,16 @@ const DataListView = ({ product, isSelect, collect, onCheckItem }) => {
                   {product.name}
                 </p>
               </NavLink>
+
+              <p className="mb-1   w-15 w-sm-100">
+                {product?.selectedAddress?.label}
+              </p>
               <p className="mb-1 text-muted text-small w-15 w-sm-100">
                 {product.email}
               </p>
-              <p className="mb-1 text-muted text-small w-15 w-sm-100">
-                {product?.selectedAddress?.label}
-              </p>
               <div className="w-15 w-sm-100">
-                <Badge color={product.statusColor} pill>
-                  {product?.isApproved?.toString()}
+                <Badge color={pillColor} pill>
+                  {product?.status}
                 </Badge>
               </div>
             </div>

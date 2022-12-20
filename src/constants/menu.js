@@ -22,7 +22,7 @@ const data = [
     subs: [
       {
         icon: 'simple-icon-paper-plane',
-        label: 'Registrations',
+        label: 'Registration Queue',
         to: `${adminRoot}/admin/registrations`,
       },
     ],

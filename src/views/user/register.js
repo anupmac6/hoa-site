@@ -75,6 +75,7 @@ const Register = ({ registerUserAction, history }) => {
             isApproved: false,
             isActive: true,
             selectedAddress,
+            status: 'waiting approval',
           });
         })
         .then(() => {

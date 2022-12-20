@@ -7,20 +7,17 @@ import {
   DropdownItem,
   DropdownToggle,
   CustomInput,
+  Alert,
 } from 'reactstrap';
 import { injectIntl } from 'react-intl';
 
 import { Colxx, Separator } from 'components/common/CustomBootstrap';
-import IntlMessages from 'helpers/IntlMessages';
-
-import Breadcrumb from '../navs/Breadcrumb';
 
 const ListPageHeading = ({
   handleChangeSelectAll,
-  match,
   selectedItemsLength,
   itemsLength,
-  heading,
+  onSelectedItemsClick,
 }) => {
   const [dropdownSplitOpen, setDropdownSplitOpen] = useState(false);
 
@@ -28,9 +25,7 @@ const ListPageHeading = ({
     <Row>
       <Colxx xxs="12">
         <div className="mb-2">
-          <h1>
-            <IntlMessages id={heading} />
-          </h1>
+          <h1>Registration Queue</h1>
 
           <div className="text-zero top-right-button-container">
             {'  '}
@@ -63,21 +58,25 @@ const ListPageHeading = ({
                 className="dropdown-toggle-split btn-lg"
               />
               <DropdownMenu right>
-                <DropdownItem>Reject</DropdownItem>
-                <DropdownItem
-                  onClick={() => {
-                    console.log('approve');
-                  }}
-                >
+                <DropdownItem onClick={() => onSelectedItemsClick('approve')}>
                   Approve
+                </DropdownItem>
+                <DropdownItem onClick={() => onSelectedItemsClick('hold')}>
+                  Put on Hold
+                </DropdownItem>
+                <DropdownItem onClick={() => onSelectedItemsClick('reject')}>
+                  Reject
                 </DropdownItem>
               </DropdownMenu>
             </ButtonDropdown>
           </div>
-          <Breadcrumb match={match} />
         </div>
 
         <Separator className="mb-5" />
+        <Alert color="info" className="rounded">
+          These are the list of users who are registered and waiting approval.
+          Make sure to verify they belong to the correct address.
+        </Alert>
       </Colxx>
     </Row>
   );
