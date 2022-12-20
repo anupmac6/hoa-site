@@ -5,7 +5,13 @@ import classnames from 'classnames';
 import { ContextMenuTrigger } from 'react-contextmenu';
 import { Colxx } from 'components/common/CustomBootstrap';
 
-const DataListView = ({ product, isSelect, collect, onCheckItem }) => {
+const DataListView = ({
+  product,
+  isSelect,
+  collect,
+  onCheckItem,
+  showActive,
+}) => {
   const pillColor = useMemo(() => {
     if (product.status === 'waiting approval') {
       return 'warning';
@@ -46,6 +52,14 @@ const DataListView = ({ product, isSelect, collect, onCheckItem }) => {
               <p className="mb-1 text-muted text-small w-15 w-sm-100">
                 {product.email}
               </p>
+              {showActive && (
+                <div className="w-15 w-sm-100">
+                  <Badge color={product.isActive ? 'success' : 'danger'} pill>
+                    {product?.isActive && 'Active'}
+                    {!product?.isActive && 'InActive'}
+                  </Badge>
+                </div>
+              )}
               <div className="w-15 w-sm-100">
                 <Badge color={pillColor} pill>
                   {product?.status}

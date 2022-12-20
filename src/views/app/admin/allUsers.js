@@ -28,7 +28,7 @@ const categories = [
   { label: 'Desserts', value: 'Desserts', key: 2 },
 ];
 
-const Registrations = ({ match }) => {
+const AllUsers = ({ match }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [displayMode, setDisplayMode] = useState('list');
   const [currentPage, setCurrentPage] = useState(1);
@@ -49,11 +49,7 @@ const Registrations = ({ match }) => {
     setCurrentPage(1);
   }, [selectedPageSize, selectedOrderOption]);
   const fetchData = async () => {
-    const customers = await firestore
-      .collection('customers')
-      .where('isActive', '==', true)
-      .where('isApproved', '==', false)
-      .get();
+    const customers = await firestore.collection('customers').get();
 
     if (!customers.empty) {
       const customersDoc = [];
@@ -200,7 +196,7 @@ const Registrations = ({ match }) => {
     <>
       <div className="disable-text-selection">
         <ListPageHeading
-          heading="Registration Queue"
+          heading="All Users"
           displayMode={displayMode}
           changeDisplayMode={setDisplayMode}
           handleChangeSelectAll={handleChangeSelectAll}
@@ -238,10 +234,11 @@ const Registrations = ({ match }) => {
           onContextMenuClick={onContextMenuClick}
           onContextMenu={onContextMenu}
           onChangePage={setCurrentPage}
+          showActive
         />
       </div>
     </>
   );
 };
 
-export default Registrations;
+export default AllUsers;

@@ -23,7 +23,12 @@ const data = [
       {
         icon: 'simple-icon-people',
         label: 'Registration Queue',
-        to: `${adminRoot}/admin/registrations`,
+        to: `${adminRoot}/admin/registration-queue`,
+      },
+      {
+        icon: 'iconsminds-mens',
+        label: 'All Users',
+        to: `${adminRoot}/admin/all-users`,
       },
     ],
   },

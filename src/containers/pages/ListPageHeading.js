@@ -18,6 +18,7 @@ const ListPageHeading = ({
   selectedItemsLength,
   itemsLength,
   onSelectedItemsClick,
+  heading,
 }) => {
   const [dropdownSplitOpen, setDropdownSplitOpen] = useState(false);
 
@@ -25,7 +26,7 @@ const ListPageHeading = ({
     <Row>
       <Colxx xxs="12">
         <div className="mb-2">
-          <h1>Registration Queue</h1>
+          <h1>{heading}</h1>
 
           <div className="text-zero top-right-button-container">
             {'  '}
