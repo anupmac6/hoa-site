@@ -74,7 +74,7 @@ const Register = ({ registerUserAction, history }) => {
             email,
             isApproved: false,
             isActive: true,
-            selectedAddress: selectedAddress?.value,
+            selectedAddress,
           });
         })
         .then(() => {

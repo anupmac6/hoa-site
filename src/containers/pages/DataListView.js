@@ -19,18 +19,18 @@ const DataListView = ({ product, isSelect, collect, onCheckItem }) => {
             <div className="card-body align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero align-items-lg-center">
               <NavLink to={`?p=${product.id}`} className="w-40 w-sm-100">
                 <p className="list-item-heading mb-1 truncate">
-                  {product.title}
+                  {product.name}
                 </p>
               </NavLink>
               <p className="mb-1 text-muted text-small w-15 w-sm-100">
-                {product.category}
+                {product.email}
               </p>
               <p className="mb-1 text-muted text-small w-15 w-sm-100">
-                {product.date}
+                {product?.selectedAddress?.label}
               </p>
               <div className="w-15 w-sm-100">
                 <Badge color={product.statusColor} pill>
-                  {product.status}
+                  {product?.isApproved?.toString()}
                 </Badge>
               </div>
             </div>

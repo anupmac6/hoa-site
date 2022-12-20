@@ -1,6 +1,5 @@
 import React from 'react';
 import { Row } from 'reactstrap';
-import Pagination from './Pagination';
 import ContextMenuContainer from './ContextMenuContainer';
 import DataListView from './DataListView';
 import ImageListView from './ImageListView';
@@ -15,11 +14,8 @@ const ListPageListing = ({
   displayMode,
   selectedItems,
   onCheckItem,
-  currentPage,
-  totalPage,
   onContextMenuClick,
   onContextMenu,
-  onChangePage,
 }) => {
   return (
     <Row>
@@ -56,11 +52,7 @@ const ListPageListing = ({
           />
         );
       })}
-      <Pagination
-        currentPage={currentPage}
-        totalPage={totalPage}
-        onChangePage={(i) => onChangePage(i)}
-      />
+
       <ContextMenuContainer
         onContextMenuClick={onContextMenuClick}
         onContextMenu={onContextMenu}

@@ -5,12 +5,12 @@ const data = [
     id: 'gogo',
     icon: 'iconsminds-air-balloon-1',
     label: 'menu.gogo',
-    to: `${adminRoot}/gogo`,
+    to: `${adminRoot}/home`,
     subs: [
       {
         icon: 'simple-icon-paper-plane',
         label: 'menu.start',
-        to: `${adminRoot}/gogo/start`,
+        to: `${adminRoot}/home/start`,
       },
     ],
   },
