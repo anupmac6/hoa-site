@@ -31,6 +31,9 @@ const ViewUser = React.lazy(() =>
 const ViewError = React.lazy(() =>
   import(/* webpackChunkName: "views-error" */ './views/error')
 );
+const ViewRegistrationSuccessful = React.lazy(() =>
+  import(/* webpackChunkName: "views-error" */ './views/registrationComplete')
+);
 const ViewUnauthorized = React.lazy(() =>
   import(/* webpackChunkName: "views-error" */ './views/unauthorized')
 );
@@ -83,6 +86,14 @@ class App extends React.Component {
                     exact
                     render={(props) => <ViewUnauthorized {...props} />}
                   />
+                  <Route
+                    path="/registration-complete"
+                    exact
+                    render={(props) => (
+                      <ViewRegistrationSuccessful {...props} />
+                    )}
+                  />
+
                   <Route
                     path="/"
                     exact
