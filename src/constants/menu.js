@@ -15,6 +15,19 @@ const data = [
     ],
   },
   {
+    id: 'admin',
+    icon: 'iconsminds-three-arrow-fork',
+    label: 'Admin',
+    to: `${adminRoot}/admin`,
+    subs: [
+      {
+        icon: 'simple-icon-paper-plane',
+        label: 'Registrations',
+        to: `${adminRoot}/admin/registrations`,
+      },
+    ],
+  },
+  {
     id: 'secondmenu',
     icon: 'iconsminds-three-arrow-fork',
     label: 'Admin',
