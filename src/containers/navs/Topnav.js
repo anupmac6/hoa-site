@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable no-use-before-define */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { injectIntl } from 'react-intl';
 
 import {
@@ -19,6 +19,7 @@ import {
   clickOnMobileMenu,
   logoutUser,
   changeLocale,
+  loginUserSuccess,
 } from 'redux/actions';
 
 import {
@@ -28,6 +29,8 @@ import {
 } from 'constants/defaultValues';
 
 import { MobileMenuIcon, MenuIcon } from 'components/svg';
+import { firestore } from 'helpers/Firebase';
+import { setCurrentUser } from 'helpers/Utils';
 import TopnavEasyAccess from './Topnav.EasyAccess';
 import TopnavNotifications from './Topnav.Notifications';
 import TopnavDarkSwitch from './Topnav.DarkSwitch';
@@ -40,9 +43,40 @@ const TopNav = ({
   setContainerClassnamesAction,
   clickOnMobileMenuAction,
   logoutUserAction,
+  currentUser,
+  changeCurrentUser,
 }) => {
   const [isInFullScreen, setIsInFullScreen] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState('');
+
+  const getUser = async (userId) => {
+    await firestore
+      .collection('customers')
+      .doc(userId)
+      .get()
+      .then((userRef) => {
+        const data = userRef.data();
+        if (data && data.isActive && data.isApproved) {
+          setCurrentUser({ uid: userId, ...data });
+          changeCurrentUser({ uid: userId, ...data });
+        } else {
+          setCurrentUser(null);
+          changeCurrentUser(null);
+          history.push(adminRoot);
+          console.log('this');
+        }
+      })
+      .catch(() => {
+        setCurrentUser(null);
+        changeCurrentUser(null);
+        history.push(adminRoot);
+        console.log('that');
+      });
+  };
+
+  useEffect(() => {
+    getUser(currentUser?.uid);
+  }, []);
 
   const search = () => {
     history.push(`${searchPath}?key=${searchKeyword}`);
@@ -190,7 +224,7 @@ const TopNav = ({
         <div className="user d-inline-block">
           <UncontrolledDropdown className="dropdown-menu-right">
             <DropdownToggle className="p-0" color="empty">
-              <span className="name mr-1">Sarah Kortney</span>
+              <span className="name mr-1">{currentUser?.name}</span>
               <span>
                 <img alt="Profile" src="/assets/img/profiles/l-1.jpg" />
               </span>
@@ -212,14 +246,16 @@ const TopNav = ({
   );
 };
 
-const mapStateToProps = ({ menu, settings }) => {
+const mapStateToProps = ({ authUser, menu, settings }) => {
   const { containerClassnames, menuClickCount, selectedMenuHasSubItems } = menu;
+  const { currentUser } = authUser;
   const { locale } = settings;
   return {
     containerClassnames,
     menuClickCount,
     selectedMenuHasSubItems,
     locale,
+    currentUser,
   };
 };
 export default injectIntl(
@@ -228,5 +264,6 @@ export default injectIntl(
     clickOnMobileMenuAction: clickOnMobileMenu,
     logoutUserAction: logoutUser,
     changeLocaleAction: changeLocale,
+    changeCurrentUser: loginUserSuccess,
   })(TopNav)
 );

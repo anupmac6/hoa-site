@@ -19,6 +19,7 @@ import CustomSelectInput from 'components/common/CustomSelectInput';
 
 import Select from 'react-select';
 import { NotificationManager } from 'components/common/react-notifications';
+import { UserRole } from 'constants/defaultValues';
 import StateButton from '../../components/StateButton';
 
 const Register = ({ registerUserAction, history }) => {
@@ -76,6 +77,7 @@ const Register = ({ registerUserAction, history }) => {
             isActive: true,
             isAdmin: false,
             selectedAddress,
+            role: UserRole.User,
             status: 'waiting approval',
           });
         })

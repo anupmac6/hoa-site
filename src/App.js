@@ -7,7 +7,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 import { IntlProvider } from 'react-intl';
-import './helpers/Firebase';
+import { loginUserSuccess } from 'redux/actions';
 import AppLocale from './lang';
 import ColorSwitcher from './components/common/ColorSwitcher';
 import { NotificationContainer } from './components/common/react-notifications';
@@ -52,7 +52,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { locale } = this.props;
+    const { locale, currentUser } = this.props;
     const currentAppLocale = AppLocale[locale];
 
     return (
@@ -70,7 +70,8 @@ class App extends React.Component {
                   <ProtectedRoute
                     path={adminRoot}
                     component={ViewApp}
-                    roles={[UserRole.Admin, UserRole.Editor]}
+                    currentUser={currentUser}
+                    roles={[UserRole.User, UserRole.Admin, UserRole.Editor]}
                   />
                   <Route
                     path="/user"
@@ -118,6 +119,8 @@ const mapStateToProps = ({ authUser, settings }) => {
   const { locale } = settings;
   return { currentUser, locale };
 };
-const mapActionsToProps = {};
+const mapActionsToProps = {
+  update: loginUserSuccess,
+};
 
 export default connect(mapStateToProps, mapActionsToProps)(App);

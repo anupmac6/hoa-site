@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Card, CardTitle, Label, FormGroup, Button } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 
 import { Formik, Form, Field } from 'formik';
 import { NotificationManager } from 'components/common/react-notifications';
 
-import { loginUser } from 'redux/actions';
+import { loginUser, loginUserSuccess } from 'redux/actions';
 import { Colxx } from 'components/common/CustomBootstrap';
 import IntlMessages from 'helpers/IntlMessages';
+import { auth, firestore } from 'helpers/Firebase';
+import { setCurrentUser } from 'helpers/Utils';
+import { adminRoot } from 'constants/defaultValues';
 
 const validatePassword = (value) => {
   let error;
@@ -30,9 +33,10 @@ const validateEmail = (value) => {
   return error;
 };
 
-const Login = ({ history, loading, error, loginUserAction }) => {
+const Login = ({ history, loading, error }) => {
   const [email] = useState('anupmac6@gmail.com');
   const [password] = useState('Mothermary18');
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (error) {
@@ -40,12 +44,78 @@ const Login = ({ history, loading, error, loginUserAction }) => {
     }
   }, [error]);
 
-  const onUserLogin = (values) => {
+  const onUserLogin = async (values) => {
     if (!loading) {
       if (values.email !== '' && values.password !== '') {
-        loginUserAction(values, history);
+        // loginUserAction(values, history);
+        return auth
+          .signInWithEmailAndPassword(email, password)
+          .then((user) => {
+            console.log(user);
+            const userId = user.user.uid;
+
+            return firestore
+              .collection('customers')
+              .doc(userId)
+              .get()
+              .then((userRef) => {
+                const data = userRef.data();
+
+                if (data && data.isActive && data.isApproved) {
+                  console.log(data);
+
+                  setCurrentUser({ uid: userId, ...data });
+                  dispatch(loginUserSuccess({ uid: userId, ...data }));
+                  history.push(adminRoot);
+                  return { uid: userId, ...data };
+                }
+                NotificationManager.warning(
+                  'Cannot log user in.',
+                  'Login Error',
+                  3000,
+                  null,
+                  null,
+                  ''
+                );
+                return null;
+              })
+              .catch(() => {
+                NotificationManager.warning(
+                  'Cannot log user in.',
+                  'Login Error',
+                  3000,
+                  null,
+                  null,
+                  ''
+                );
+                return null;
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+
+            NotificationManager.warning(
+              err.message,
+              'Registration Error',
+              3000,
+              null,
+              null,
+              ''
+            );
+            return null;
+          });
       }
+      NotificationManager.warning(
+        'Please make sure you fill in all the details',
+        'Login Error',
+        3000,
+        null,
+        null,
+        ''
+      );
+      return null;
     }
+    return null;
   };
 
   const initialValues = { email, password };

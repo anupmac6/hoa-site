@@ -1,6 +1,7 @@
 export const UserRole = {
-  Admin: 0,
-  Editor: 1,
+  User: 0,
+  Admin: 1,
+  Editor: 2,
 };
 
 /*

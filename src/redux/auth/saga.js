@@ -3,7 +3,6 @@ import { auth } from 'helpers/Firebase';
 import { adminRoot, currentUser } from 'constants/defaultValues';
 import { setCurrentUser } from 'helpers/Utils';
 import {
-  LOGIN_USER,
   REGISTER_USER,
   LOGOUT_USER,
   FORGOT_PASSWORD,
@@ -11,8 +10,6 @@ import {
 } from '../contants';
 
 import {
-  loginUserSuccess,
-  loginUserError,
   registerUserSuccess,
   registerUserError,
   forgotPasswordSuccess,
@@ -20,37 +17,6 @@ import {
   resetPasswordSuccess,
   resetPasswordError,
 } from './actions';
-
-export function* watchLoginUser() {
-  // eslint-disable-next-line no-use-before-define
-  yield takeEvery(LOGIN_USER, loginWithEmailPassword);
-}
-
-const loginWithEmailPasswordAsync = async (email, password) =>
-  // eslint-disable-next-line no-return-await
-  await auth
-    .signInWithEmailAndPassword(email, password)
-    .then((user) => user)
-    .catch((error) => error);
-
-function* loginWithEmailPassword({ payload }) {
-  const { email, password } = payload.user;
-  const { history } = payload;
-  try {
-    const loginUser = yield call(loginWithEmailPasswordAsync, email, password);
-    if (!loginUser.message) {
-      const item = { uid: loginUser.user.uid, ...currentUser };
-      console.log(item);
-      setCurrentUser(item);
-      yield put(loginUserSuccess(item));
-      history.push(adminRoot);
-    } else {
-      yield put(loginUserError(loginUser.message));
-    }
-  } catch (error) {
-    yield put(loginUserError(error));
-  }
-}
 
 export function* watchRegisterUser() {
   // eslint-disable-next-line no-use-before-define
@@ -165,7 +131,6 @@ function* resetPassword({ payload }) {
 
 export default function* rootSaga() {
   yield all([
-    fork(watchLoginUser),
     fork(watchLogoutUser),
     fork(watchRegisterUser),
     fork(watchForgotPassword),
