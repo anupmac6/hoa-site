@@ -27,17 +27,17 @@ const data = [
         to: `${adminRoot}/home`,
         subs: [
           {
-            icon: 'simple-icon-paper-plane',
+            icon: 'iconsminds-dollar',
             label: 'Make Payment',
             to: `${adminRoot}/home/start`,
           },
           {
-            icon: 'simple-icon-paper-plane',
+            icon: 'iconsminds-box-with-folders',
             label: 'Invoices',
             to: `${adminRoot}/home/start`,
           },
           {
-            icon: 'simple-icon-paper-plane',
+            icon: 'iconsminds-gear-2',
             label: 'Manage Account',
             to: `${adminRoot}/home/start`,
           },

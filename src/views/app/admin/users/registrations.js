@@ -52,6 +52,7 @@ const Registrations = ({ match }) => {
     const customers = await firestore
       .collection('customers')
       .where('isActive', '==', true)
+      .where('isAdmin', '!=', true)
       .where('isApproved', '==', false)
       .get();
 

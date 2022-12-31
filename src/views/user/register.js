@@ -74,6 +74,7 @@ const Register = ({ registerUserAction, history }) => {
             email,
             isApproved: false,
             isActive: true,
+            isAdmin: false,
             selectedAddress,
             status: 'waiting approval',
           });
