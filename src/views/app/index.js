@@ -3,6 +3,7 @@ import { Route, withRouter, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import AppLayout from 'layout/AppLayout';
+import { UserRole } from 'constants/defaultValues';
 // import { ProtectedRoute, UserRole } from 'helpers/authHelper';
 
 const Home = React.lazy(() =>
@@ -18,7 +19,7 @@ const BlankPage = React.lazy(() =>
   import(/* webpackChunkName: "viwes-blank-page" */ './blank-page')
 );
 
-const App = ({ match }) => {
+const App = ({ match, currentUser }) => {
   return (
     <AppLayout>
       <div className="dashboard-wrapper">
@@ -29,10 +30,13 @@ const App = ({ match }) => {
               path={`${match.url}/home`}
               render={(props) => <Home {...props} />}
             />
-            <Route
-              path={`${match.url}/admin`}
-              render={(props) => <Admin {...props} />}
-            />
+            {currentUser?.role === UserRole.Admin && (
+              <Route
+                path={`${match.url}/admin`}
+                render={(props) => <Admin {...props} />}
+              />
+            )}
+
             <Route
               path={`${match.url}/second-menu`}
               render={(props) => <SecondMenu {...props} />}
@@ -54,9 +58,10 @@ const App = ({ match }) => {
   );
 };
 
-const mapStateToProps = ({ menu }) => {
+const mapStateToProps = ({ authUser, menu }) => {
+  const { currentUser } = authUser;
   const { containerClassnames } = menu;
-  return { containerClassnames };
+  return { containerClassnames, currentUser };
 };
 
 export default withRouter(connect(mapStateToProps, {})(App));

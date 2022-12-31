@@ -1,4 +1,4 @@
-import { UserRole, adminRoot } from './defaultValues';
+import { adminRoot } from './defaultValues';
 
 const data = [
   {
@@ -6,7 +6,6 @@ const data = [
     icon: 'iconsminds-home-1',
     label: 'Home',
     to: `${adminRoot}/home`,
-    roles: [UserRole.Admin, UserRole.User],
     subs: [
       {
         id: 'home-tasks',
@@ -51,7 +50,6 @@ const data = [
     icon: 'simple-icon-lock',
     label: 'Admin',
     to: `${adminRoot}/admin`,
-    roles: [UserRole.Admin],
     subs: [
       {
         id: 'admin-users',
@@ -116,7 +114,7 @@ const data = [
     icon: 'iconsminds-three-arrow-fork',
     label: 'Admin',
     to: `${adminRoot}/second-menu`,
-    roles: [UserRole.Admin],
+    // roles: [UserRole.Admin, UserRole.Editor],
     subs: [
       {
         icon: 'simple-icon-paper-plane',
