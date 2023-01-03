@@ -29,18 +29,13 @@ const data = [
         subs: [
           {
             icon: 'iconsminds-dollar',
-            label: 'Make Payment',
+            label: 'Pay Dues',
             to: `${adminRoot}/home/start`,
           },
           {
             icon: 'iconsminds-box-with-folders',
-            label: 'Invoices',
-            to: `${adminRoot}/home/start`,
-          },
-          {
-            icon: 'iconsminds-gear-2',
-            label: 'Manage Account',
-            to: `${adminRoot}/home/start`,
+            label: 'Payments',
+            to: `${adminRoot}/home/payments`,
           },
         ],
       },

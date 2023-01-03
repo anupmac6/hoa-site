@@ -37,6 +37,10 @@ const BlankPage = ({ history, match, currentUser }) => {
   if (isLoading) {
     return <div className="loading" />;
   }
+
+  const goToPayments = () => {
+    history.push('/app/home/payments');
+  };
   return (
     <>
       <Row>
@@ -55,7 +59,7 @@ const BlankPage = ({ history, match, currentUser }) => {
                 <hr className="my-4" />
 
                 <p className="lead mb-0">
-                  <Button color="primary" size="lg">
+                  <Button onClick={goToPayments} color="primary" size="lg">
                     View Payments
                   </Button>
                 </p>

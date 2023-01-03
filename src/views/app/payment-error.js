@@ -30,6 +30,9 @@ const BlankPage = ({ history, match, currentUser }) => {
       history.push(adminRoot);
     }
   };
+  const goToPayments = () => {
+    history.push('/app/home/start');
+  };
 
   useEffect(() => {
     fetchData();
@@ -55,7 +58,7 @@ const BlankPage = ({ history, match, currentUser }) => {
                 <hr className="my-4" />
 
                 <p className="lead mb-0">
-                  <Button color="primary" size="lg">
+                  <Button onClick={goToPayments} color="primary" size="lg">
                     Try Again
                   </Button>
                 </p>
