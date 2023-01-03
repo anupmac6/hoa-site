@@ -8,19 +8,19 @@ const data = [
     to: `${adminRoot}/home`,
     roles: [UserRole.Admin, UserRole.User],
     subs: [
-      {
-        id: 'home-tasks',
-        label: 'Maintenance',
-        icon: 'simple-icon-lock',
-        to: `${adminRoot}/home`,
-        subs: [
-          {
-            icon: 'simple-icon-paper-plane',
-            label: 'menu.start',
-            to: `${adminRoot}/home/start`,
-          },
-        ],
-      },
+      // {
+      //   id: 'home-tasks',
+      //   label: 'Maintenance',
+      //   icon: 'simple-icon-lock',
+      //   to: `${adminRoot}/home`,
+      //   subs: [
+      //     {
+      //       icon: 'simple-icon-paper-plane',
+      //       label: 'menu.start',
+      //       to: `${adminRoot}/home/start`,
+      //     },
+      //   ],
+      // },
       {
         id: 'home-tasks',
         label: 'Dues',
@@ -66,11 +66,6 @@ const data = [
           {
             icon: 'iconsminds-mens',
             label: 'All Users',
-            to: `${adminRoot}/admin/users/all-users`,
-          },
-          {
-            icon: 'iconsminds-mens',
-            label: 'Admins',
             to: `${adminRoot}/admin/users/all-users`,
           },
         ],

@@ -13,12 +13,12 @@ const Start = ({ match, currentUser }) => {
   const onClickHandler = async () => {
     return firestore
       .collection('customers')
-      .doc('Y7kd5Vbje9SgYLbrwpayM9BuHV32')
+      .doc(currentUser?.uid)
       .collection('checkout_sessions')
       .add({
         price: 'price_1MFhRaJWmex15Pmf8XEROVy8',
-        success_url: window.location.origin,
-        cancel_url: window.location.origin,
+        success_url: `${window.location.origin}/app/payment-success`,
+        cancel_url: `${window.location.origin}/app/payment-error`,
       })
       .then((docRef) => {
         docRef.onSnapshot(async (snap) => {
@@ -41,7 +41,7 @@ const Start = ({ match, currentUser }) => {
   const onOneTimeClickHandler = async () => {
     return firestore
       .collection('customers')
-      .doc('Y7kd5Vbje9SgYLbrwpayM9BuHV32')
+      .doc(currentUser?.uid)
       .collection('checkout_sessions')
       .add({
         mode: 'payment',
@@ -51,8 +51,9 @@ const Start = ({ match, currentUser }) => {
             quantity: 1,
           },
         ],
-        success_url: window.location.origin,
-        cancel_url: window.location.origin,
+
+        success_url: `${window.location.origin}/app/payment-success`,
+        cancel_url: `${window.location.origin}/app/payment-error`,
       })
       .then((docRef) => {
         docRef.onSnapshot(async (snap) => {
