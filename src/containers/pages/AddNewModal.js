@@ -16,6 +16,7 @@ const AddNewModal = ({ modalOpen, toggleModal, address, currentUser }) => {
   const [notes, setNotes] = useState('');
   const [isCash, setIsCash] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  console.log(address);
 
   const onSaveHandler = async () => {
     try {
@@ -24,23 +25,13 @@ const AddNewModal = ({ modalOpen, toggleModal, address, currentUser }) => {
         .collection('payments')
         .doc(new Date().getFullYear().toString())
         .collection('receipts')
-        .doc(currentUser?.selectedAddress?.value)
+        .doc(address.id)
         .set({
-          method: isCash ? 'Cash' : 'Cheque',
+          method: isCash ? 'Cash' : 'Check',
           created: Math.floor(new Date().getTime() / 1000),
           userId: currentUser?.uid,
           notes,
-        });
-
-      await firestore
-        .collection('customers')
-        .doc(currentUser.uid)
-        .collection('payments')
-        .doc()
-        .set({
-          status: 'succeeded',
-          method: isCash ? 'Cash' : 'Cheque',
-          created: Math.floor(new Date().getTime() / 1000),
+          street: address.street,
         });
 
       setIsLoading(false);
@@ -85,9 +76,9 @@ const AddNewModal = ({ modalOpen, toggleModal, address, currentUser }) => {
             <CustomInput
               onChange={() => setIsCash(false)}
               type="radio"
-              id="cheque"
+              id="check"
               name="customRadio"
-              label="Cheque"
+              label="Check"
               checked={!isCash}
             />
           </ModalBody>

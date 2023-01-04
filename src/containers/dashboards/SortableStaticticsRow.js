@@ -4,7 +4,7 @@ import { ReactSortable } from 'react-sortablejs';
 import { Colxx } from 'components/common/CustomBootstrap';
 import RadialProgressCard from 'components/cards/RadialProgressCard';
 
-const SortableStaticticsRow = ({ messages }) => {
+const SortableStaticticsRow = () => {
   const [state, setState] = useState([
     {
       key: 1,
@@ -15,16 +15,6 @@ const SortableStaticticsRow = ({ messages }) => {
       key: 2,
       title: 'dashboards.work-progress',
       percent: 75,
-    },
-    {
-      key: 3,
-      title: 'dashboards.tasks-completed',
-      percent: 32,
-    },
-    {
-      key: 4,
-      title: 'dashboards.payments-done',
-      percent: 45,
     },
   ]);
 
@@ -39,7 +29,7 @@ const SortableStaticticsRow = ({ messages }) => {
         return (
           <Colxx xl="3" lg="6" className="mb-4" key={x.key}>
             <RadialProgressCard
-              title={messages[x.title]}
+              title={x.title}
               percent={x.percent}
               isSortable
             />

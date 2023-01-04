@@ -1,15 +1,15 @@
 const data = [
-  { title: 'dashboards.pending-orders', icon: 'iconsminds-clock', value: 14 },
+  { title: 'User Waiting Approval', icon: 'iconsminds-clock', value: 14 },
   {
-    title: 'dashboards.completed-orders',
+    title: 'Active Users',
     icon: 'iconsminds-basket-coins',
     value: 32,
   },
   {
-    title: 'dashboards.refund-requests',
+    title: 'Admins',
     icon: 'iconsminds-arrow-refresh',
     value: 74,
   },
-  { title: 'dashboards.new-comments', icon: 'iconsminds-mail-read', value: 25 },
+  { title: 'Inactive Users', icon: 'iconsminds-mail-read', value: 25 },
 ];
 export default data;

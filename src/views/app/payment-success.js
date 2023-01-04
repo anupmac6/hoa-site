@@ -32,6 +32,7 @@ const BlankPage = ({ history, match, currentUser }) => {
             created: Math.floor(new Date().getTime() / 1000),
             userId: currentUser?.uid,
             notes: 'Payment received via Stripe',
+            street: currentUser?.selectedAddress?.label,
           });
 
         setIsLoading(false);

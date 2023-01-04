@@ -12,13 +12,17 @@ const AllUsers = React.lazy(() =>
 const Addresses = React.lazy(() =>
   import(/* webpackChunkName: "start" */ './dues/addresses')
 );
+
+const Dashboard = React.lazy(() =>
+  import(/* webpackChunkName: "start" */ './home/dashboard')
+);
 const Admin = ({ match }) => (
   <Suspense fallback={<div className="loading" />}>
     <Switch>
       <Redirect
         exact
         from={`${match.url}/`}
-        to={`${match.url}/users/registration-queue`}
+        to={`${match.url}/home/dashboard`}
       />
       <Route
         path={`${match.url}/users/registration-queue`}
@@ -31,6 +35,10 @@ const Admin = ({ match }) => (
       <Route
         path={`${match.url}/dues/addresses`}
         render={(props) => <Addresses {...props} />}
+      />
+      <Route
+        path={`${match.url}/home/dashboard`}
+        render={(props) => <Dashboard {...props} />}
       />
       <Redirect to="/error" />
     </Switch>

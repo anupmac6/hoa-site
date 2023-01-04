@@ -224,7 +224,7 @@ const TopNav = ({
             <DropdownToggle className="p-0" color="empty">
               <span className="name mr-1">{currentUser?.name}</span>
               <span>
-                <img alt="Profile" src="/assets/img/profiles/l-1.jpg" />
+                <img alt="Profile" src="/assets/img/profiles/user.png" />
               </span>
             </DropdownToggle>
             <DropdownMenu className="mt-3" right>

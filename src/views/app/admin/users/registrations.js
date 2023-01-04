@@ -52,7 +52,6 @@ const Registrations = ({ match }) => {
     const customers = await firestore
       .collection('customers')
       .where('isActive', '==', true)
-      .where('isAdmin', '!=', true)
       .where('isApproved', '==', false)
       .get();
 
@@ -195,6 +194,7 @@ const Registrations = ({ match }) => {
   const startIndex = (currentPage - 1) * selectedPageSize;
   const endIndex = currentPage * selectedPageSize;
 
+  console.log(items);
   return !isLoaded ? (
     <div className="loading" />
   ) : (

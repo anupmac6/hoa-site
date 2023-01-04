@@ -50,6 +50,18 @@ const data = [
     subs: [
       {
         id: 'admin-users',
+        label: 'Home',
+        to: `${adminRoot}/admin/home`,
+        subs: [
+          {
+            icon: 'simple-icon-people',
+            label: 'Dashboard',
+            to: `${adminRoot}/admin/home/dashboard`,
+          },
+        ],
+      },
+      {
+        id: 'admin-users',
         label: 'Users',
         to: `${adminRoot}/admin/users`,
         subs: [

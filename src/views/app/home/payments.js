@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Badge, Card, CardBody, Row } from 'reactstrap';
 import { Colxx, Separator } from 'components/common/CustomBootstrap';
 import Breadcrumb from 'containers/navs/Breadcrumb';
@@ -10,42 +10,60 @@ import { firestore } from 'helpers/Firebase';
 const Start = ({ match, currentUser }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [payments, setPayments] = useState([]);
+  const [receipts, setReceipts] = useState([]);
 
-  const fetchData = async () => {
+  useEffect(() => {
+    let customerPaymentsSubscription;
+    let paymentsSubscription;
+
     try {
-      const docs = await firestore
+      customerPaymentsSubscription = firestore
         .collection('customers')
         .doc(currentUser?.uid)
         .collection('payments')
         .where('status', '==', 'succeeded')
         .orderBy('created', 'desc')
-        .get();
-
-      if (!docs.empty) {
-        const paymentsDoc = [];
-        console.log(docs);
-        docs.docs.forEach((doc) => {
-          const docData = doc.data();
-          paymentsDoc.push({
-            id: doc.id,
-            ...docData,
+        .onSnapshot((querySnapshot) => {
+          const custPayments = [];
+          querySnapshot.forEach((doc) => {
+            const docData = doc.data();
+            custPayments.push({
+              id: doc.id,
+              ...docData,
+            });
           });
+
+          setIsLoading(false);
+          setPayments(custPayments);
         });
-        setIsLoading(false);
-        setPayments(paymentsDoc);
-      } else {
-        setIsLoading(false);
-        setPayments([]);
-      }
+
+      paymentsSubscription = firestore
+        .collection('payments')
+        .doc(new Date().getFullYear().toString())
+        .collection('receipts')
+        .doc(currentUser?.selectedAddress?.value)
+        .onSnapshot((querySnapshot) => {
+          if (querySnapshot.exists) {
+            const data = querySnapshot.data();
+
+            if (data?.method !== 'online') {
+              setReceipts([{ id: querySnapshot.id, ...querySnapshot.data() }]);
+            }
+          }
+        });
     } catch (error) {
-      console.log(error);
       setIsLoading(false);
       setPayments([]);
     }
-  };
 
-  useEffect(() => {
-    fetchData();
+    return () => {
+      if (customerPaymentsSubscription) {
+        customerPaymentsSubscription();
+      }
+      if (paymentsSubscription) {
+        paymentsSubscription();
+      }
+    };
   }, []);
 
   const getDate = (date) => {
@@ -55,6 +73,11 @@ const Start = ({ match, currentUser }) => {
       return '-';
     }
   };
+
+  const combined = useMemo(
+    () => payments.concat(receipts),
+    [payments, receipts]
+  );
   console.log(currentUser, isLoading, payments);
   return (
     <>
@@ -73,8 +96,8 @@ const Start = ({ match, currentUser }) => {
 
                 <hr className="my-4" />
 
-                {!payments.length && <p>No Payments made yet.</p>}
-                {payments.map((payment) => {
+                {!combined.length && <p>No Payments made yet.</p>}
+                {combined.map((payment) => {
                   return (
                     <div
                       key={payment.id}

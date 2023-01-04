@@ -44,7 +44,7 @@ export const currentUser = {
 
 export const themeColorStorageKey = '__theme_selected_color';
 export const isMultiColorActive = true;
-export const defaultColor = 'light.purplemonster';
+export const defaultColor = 'light.greenmoss';
 export const isDarkSwitchActive = false;
 export const defaultDirection = 'ltr';
 export const themeRadiusStorageKey = '__theme_radius';
