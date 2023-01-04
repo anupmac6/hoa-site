@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardBody, Row } from 'reactstrap';
+import { Badge, Card, CardBody, Row } from 'reactstrap';
 import { Colxx, Separator } from 'components/common/CustomBootstrap';
 import Breadcrumb from 'containers/navs/Breadcrumb';
 import { connect } from 'react-redux';
@@ -100,6 +100,11 @@ const Start = ({ match, currentUser }) => {
                           >
                             View Receipt
                           </a>
+                        )}
+                        {payment?.method && (
+                          <Badge color="success" pill>
+                            {payment?.method}
+                          </Badge>
                         )}
                       </div>
                     </div>

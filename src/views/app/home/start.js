@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
 import { Button, Card, CardBody, Row } from 'reactstrap';
 import { Colxx, Separator } from 'components/common/CustomBootstrap';
@@ -6,36 +7,63 @@ import StateButton from 'components/StateButton';
 import { firestore } from 'helpers/Firebase';
 import { loadStripe } from '@stripe/stripe-js';
 import { connect } from 'react-redux';
+// import Data from '../../../data.json';
 
 const Start = ({ match, currentUser }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [address, setAddress] = useState(null);
+  const [paidDues, setPaidDues] = useState(false);
   console.log(currentUser);
 
   useEffect(() => {
     let subscription;
+    let paidDuesSubscription;
 
     if (currentUser) {
-      subscription = firestore
-        .collection('addresses')
-        .doc(currentUser?.selectedAddress?.value)
-        .onSnapshot((querySnapshot) => {
-          if (querySnapshot.exists) {
-            setAddress({
-              id: querySnapshot.id,
-              ...querySnapshot.data(),
-            });
+      try {
+        subscription = firestore
+          .collection('addresses')
+          .doc(currentUser?.selectedAddress?.value)
+          .onSnapshot((querySnapshot) => {
+            if (querySnapshot.exists) {
+              setAddress({
+                id: querySnapshot.id,
+                ...querySnapshot.data(),
+              });
+              setIsLoading(false);
+            }
             setIsLoading(false);
-          }
-          setIsLoading(false);
-        });
+          });
+
+        paidDuesSubscription = firestore
+          .collection('payments')
+          .doc(new Date().getFullYear().toString())
+          .collection('receipts')
+          .doc(currentUser?.selectedAddress?.value)
+          .onSnapshot((querySnapshot) => {
+            if (querySnapshot.exists) {
+              console.log(querySnapshot.data());
+              setPaidDues({
+                id: querySnapshot.id,
+                ...querySnapshot.data(),
+              });
+            }
+          });
+      } catch (error) {
+        console.log(error);
+      }
     }
     return () => {
       if (subscription) {
         subscription();
       }
+
+      if (paidDuesSubscription) {
+        paidDuesSubscription();
+      }
     };
   }, []);
+
   const onOneTimeClickHandler = async () => {
     setIsLoading(true);
     return firestore
@@ -73,6 +101,30 @@ const Start = ({ match, currentUser }) => {
       });
   };
 
+  // const runScript = async () => {
+  //   const updatedData = Data.map((item) => {
+  //     return {
+  //       defaultOwners: item?.defaultOwners?.split(',') || [],
+  //       isActive: true,
+  //       isDuesExempt: false,
+  //       isTitleCompany: false,
+  //       owners: [],
+  //       street: item.street,
+  //     };
+  //   });
+
+  //   console.log(updatedData);
+
+  //   const batch = firestore.batch();
+
+  //   updatedData.forEach((item) => {
+  //     const doc = firestore.collection('addresses').doc();
+  //     batch.set(doc, item);
+  //   });
+
+  //   await batch.commit();
+  // };
+
   return (
     <>
       <Row>
@@ -94,6 +146,8 @@ const Start = ({ match, currentUser }) => {
                   <p className="lead mb-0">
                     {address?.isDuesExempt ? (
                       <Button>You are exempted from HOA Dues</Button>
+                    ) : paidDues ? (
+                      <Button>You have already paid dues for this year</Button>
                     ) : (
                       <StateButton id="hello" onClick={onOneTimeClickHandler}>
                         Make Payment

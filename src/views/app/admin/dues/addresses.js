@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Row } from 'reactstrap';
 import { Colxx, Separator } from 'components/common/CustomBootstrap';
-import Breadcrumb from 'containers/navs/Breadcrumb';
 import { connect } from 'react-redux';
 
 import { firestore } from 'helpers/Firebase';
 import TooltipItem from 'components/common/TooltipItem';
+import AddNewModal from '../../../../containers/pages/AddNewModal';
 
-const BlankPage = ({ match }) => {
+const BlankPage = ({ currentUser }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [addresses, setAddresses] = useState([]);
+  const [search, setSearch] = useState('');
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
   useEffect(() => {
     const subscription = firestore
@@ -82,7 +84,6 @@ const BlankPage = ({ match }) => {
     }
     return 'Paying Dues';
   };
-  console.log(addresses);
   if (isLoading) {
     return <div className="loading" />;
   }
@@ -90,13 +91,32 @@ const BlankPage = ({ match }) => {
     <>
       <Row>
         <Colxx xxs="12">
-          <Breadcrumb heading="Addresses" match={match} />
+          <div className="mb-2">
+            <h1> Addresses</h1>
+          </div>
+          <div className="mb-2">
+            <div className="d-block d-md-inline-block pt-1">
+              <div className="search-sm d-inline-block float-md-left mr-1 mb-1 align-top">
+                <input
+                  type="text"
+                  name="keyword"
+                  id="search"
+                  placeholder="filter"
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
           <Separator className="mb-5" />
         </Colxx>
       </Row>
 
       <Row>
-        {addresses?.map((address) => {
+        {(
+          addresses?.filter((address) =>
+            address?.street?.toLowerCase()?.includes(search?.toLowerCase())
+          ) || addresses
+        )?.map((address) => {
           return (
             <Colxx xxs="12" className="mb-3" key={address.id}>
               <Card className="d-flex flex-row">
@@ -110,6 +130,7 @@ const BlankPage = ({ match }) => {
 
                     <p className="mb-1 w-15 w-sm-100">
                       <TooltipItem
+                        id={`${address.id}active`}
                         onClick={() => onActiveToggleHandler(address.id)}
                         item={{
                           placement: 'top',
@@ -120,6 +141,7 @@ const BlankPage = ({ match }) => {
                     </p>
                     <p className="mb-1 w-15 w-sm-100">
                       <TooltipItem
+                        id={`${address.id}title`}
                         onClick={() => onTitleToggleHandler(address.id)}
                         item={{
                           placement: 'top',
@@ -130,11 +152,23 @@ const BlankPage = ({ match }) => {
                     </p>
                     <p className="mb-1 w-15 w-sm-100">
                       <TooltipItem
+                        id={`${address.id}dues`}
                         onClick={() => onDuesToggleHandler(address.id)}
                         item={{
                           placement: 'top',
                           text: renderDuesStatus(address),
                           body: 'Clicking it will toggle the status',
+                        }}
+                      />
+                    </p>
+                    <p className="mb-1 w-15 w-sm-100">
+                      <TooltipItem
+                        id={`${address.id}dues`}
+                        onClick={() => setSelectedAddress(address)}
+                        item={{
+                          placement: 'top',
+                          text: 'Record Payment',
+                          body: 'Click here to record payment',
                         }}
                       />
                     </p>
@@ -145,6 +179,12 @@ const BlankPage = ({ match }) => {
           );
         })}
       </Row>
+      <AddNewModal
+        modalOpen={!!selectedAddress}
+        toggleModal={() => setSelectedAddress(null)}
+        address={selectedAddress}
+        currentUser={currentUser}
+      />
     </>
   );
 };

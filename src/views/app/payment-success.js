@@ -22,6 +22,18 @@ const BlankPage = ({ history, match, currentUser }) => {
           snapshot.ref.delete();
         });
 
+        await firestore
+          .collection('payments')
+          .doc(new Date().getFullYear().toString())
+          .collection('receipts')
+          .doc(currentUser?.selectedAddress?.value)
+          .set({
+            method: 'online',
+            created: Math.floor(new Date().getTime() / 1000),
+            userId: currentUser?.uid,
+            notes: 'Payment received via Stripe',
+          });
+
         setIsLoading(false);
       } else {
         history.push(adminRoot);

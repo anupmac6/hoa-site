@@ -1,4 +1,5 @@
-import React from 'react';
+import { firestore } from 'helpers/Firebase';
+import React, { useState } from 'react';
 import {
   CustomInput,
   Button,
@@ -9,11 +10,46 @@ import {
   Input,
   Label,
 } from 'reactstrap';
-import Select from 'react-select';
-import CustomSelectInput from 'components/common/CustomSelectInput';
-import IntlMessages from 'helpers/IntlMessages';
 
-const AddNewModal = ({ modalOpen, toggleModal, categories }) => {
+const AddNewModal = ({ modalOpen, toggleModal, address, currentUser }) => {
+  console.log(currentUser);
+  const [notes, setNotes] = useState('');
+  const [isCash, setIsCash] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onSaveHandler = async () => {
+    try {
+      setIsLoading(true);
+      await firestore
+        .collection('payments')
+        .doc(new Date().getFullYear().toString())
+        .collection('receipts')
+        .doc(currentUser?.selectedAddress?.value)
+        .set({
+          method: isCash ? 'Cash' : 'Cheque',
+          created: Math.floor(new Date().getTime() / 1000),
+          userId: currentUser?.uid,
+          notes,
+        });
+
+      await firestore
+        .collection('customers')
+        .doc(currentUser.uid)
+        .collection('payments')
+        .doc()
+        .set({
+          status: 'succeeded',
+          method: isCash ? 'Cash' : 'Cheque',
+          created: Math.floor(new Date().getTime() / 1000),
+        });
+
+      setIsLoading(false);
+
+      toggleModal();
+    } catch (error) {
+      toggleModal();
+    }
+  };
   return (
     <Modal
       isOpen={modalOpen}
@@ -21,52 +57,50 @@ const AddNewModal = ({ modalOpen, toggleModal, categories }) => {
       wrapClassName="modal-right"
       backdrop="static"
     >
-      <ModalHeader toggle={toggleModal}>
-        <IntlMessages id="pages.add-new-modal-title" />
-      </ModalHeader>
-      <ModalBody>
-        <Label>
-          <IntlMessages id="pages.product-name" />
-        </Label>
-        <Input />
-        <Label className="mt-4">
-          <IntlMessages id="pages.category" />
-        </Label>
-        <Select
-          components={{ Input: CustomSelectInput }}
-          className="react-select"
-          classNamePrefix="react-select"
-          name="form-field-name"
-          options={categories}
-        />
-        <Label className="mt-4">
-          <IntlMessages id="pages.description" />
-        </Label>
-        <Input type="textarea" name="text" id="exampleText" />
-        <Label className="mt-4">
-          <IntlMessages id="pages.status" />
-        </Label>
-        <CustomInput
-          type="radio"
-          id="exCustomRadio"
-          name="customRadio"
-          label="ON HOLD"
-        />
-        <CustomInput
-          type="radio"
-          id="exCustomRadio2"
-          name="customRadio"
-          label="PROCESSED"
-        />
-      </ModalBody>
-      <ModalFooter>
-        <Button color="secondary" outline onClick={toggleModal}>
-          <IntlMessages id="pages.cancel" />
-        </Button>
-        <Button color="primary" onClick={toggleModal}>
-          <IntlMessages id="pages.submit" />
-        </Button>{' '}
-      </ModalFooter>
+      {isLoading && <div className="loading" />}
+      {!isLoading && (
+        <>
+          <ModalHeader toggle={toggleModal}>Record Payment</ModalHeader>
+          <ModalBody>
+            <Label>Street</Label>
+            <Input disabled defaultValue={address?.street} />
+
+            <Label className="mt-4">Notes</Label>
+            <Input
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              type="textarea"
+              name="text"
+              id="exampleText"
+            />
+            <Label className="mt-4">Payment Method</Label>
+            <CustomInput
+              onChange={() => setIsCash(true)}
+              type="radio"
+              id="cash"
+              name="customRadio"
+              label="Cash"
+              checked={isCash}
+            />
+            <CustomInput
+              onChange={() => setIsCash(false)}
+              type="radio"
+              id="cheque"
+              name="customRadio"
+              label="Cheque"
+              checked={!isCash}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" outline onClick={toggleModal}>
+              Cancel
+            </Button>
+            <Button color="primary" onClick={onSaveHandler}>
+              Save
+            </Button>{' '}
+          </ModalFooter>
+        </>
+      )}
     </Modal>
   );
 };

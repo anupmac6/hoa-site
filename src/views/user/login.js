@@ -179,9 +179,7 @@ const Login = ({ history, loading, error }) => {
                     )}
                   </FormGroup>
                   <div className="d-flex justify-content-between align-items-center">
-                    <NavLink to="/user/forgot-password">
-                      <IntlMessages id="user.forgot-password-question" />
-                    </NavLink>
+                    <NavLink to="/user/register">Signup</NavLink>
                     <Button
                       color="primary"
                       className={`btn-shadow btn-multiple-state ${
