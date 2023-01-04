@@ -8,6 +8,10 @@ const Registrations = React.lazy(() =>
 const AllUsers = React.lazy(() =>
   import(/* webpackChunkName: "start" */ './users/allUsers')
 );
+
+const Addresses = React.lazy(() =>
+  import(/* webpackChunkName: "start" */ './dues/addresses')
+);
 const Admin = ({ match }) => (
   <Suspense fallback={<div className="loading" />}>
     <Switch>
@@ -23,6 +27,10 @@ const Admin = ({ match }) => (
       <Route
         path={`${match.url}/users/all-users`}
         render={(props) => <AllUsers {...props} />}
+      />
+      <Route
+        path={`${match.url}/dues/addresses`}
+        render={(props) => <Addresses {...props} />}
       />
       <Redirect to="/error" />
     </Switch>

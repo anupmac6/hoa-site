@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { Button, Tooltip } from 'reactstrap';
 
-const TooltipItem = ({ id, item }) => {
+const TooltipItem = ({ id, item, onClick = () => {} }) => {
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
   return (
     <span>
-      <Button className="mr-1 mb-2" color="secondary" id={`tooltip_${id}`}>
+      <Button
+        onClick={onClick}
+        className="mr-1 mb-2"
+        color="secondary"
+        id={`tooltip_${id}`}
+      >
         {item.text}
       </Button>
       <Tooltip

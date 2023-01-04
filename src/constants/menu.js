@@ -65,37 +65,37 @@ const data = [
           },
         ],
       },
-      {
-        id: 'admin-tasks',
-        label: 'Maintenance',
-        to: `${adminRoot}/admin/maintenance`,
-        subs: [
-          {
-            icon: 'simple-icon-people',
-            label: 'Requests',
-            to: `${adminRoot}/admin/users/registration-queue`,
-          },
-          {
-            icon: 'iconsminds-mens',
-            label: 'Approved',
-            to: `${adminRoot}/admin/users/all-users`,
-          },
-          {
-            icon: 'iconsminds-mens',
-            label: 'Rejected',
-            to: `${adminRoot}/admin/users/all-users`,
-          },
-        ],
-      },
+      // {
+      //   id: 'admin-tasks',
+      //   label: 'Maintenance',
+      //   to: `${adminRoot}/admin/maintenance`,
+      //   subs: [
+      //     {
+      //       icon: 'simple-icon-people',
+      //       label: 'Requests',
+      //       to: `${adminRoot}/admin/users/registration-queue`,
+      //     },
+      //     {
+      //       icon: 'iconsminds-mens',
+      //       label: 'Approved',
+      //       to: `${adminRoot}/admin/users/all-users`,
+      //     },
+      //     {
+      //       icon: 'iconsminds-mens',
+      //       label: 'Rejected',
+      //       to: `${adminRoot}/admin/users/all-users`,
+      //     },
+      //   ],
+      // },
       {
         id: 'admin-dues',
         label: 'Dues',
-        to: `${adminRoot}/admin/maintenance`,
+        to: `${adminRoot}/admin/dues`,
         subs: [
           {
             icon: 'simple-icon-people',
-            label: 'Dashboard',
-            to: `${adminRoot}/admin/users/registration-queue`,
+            label: 'Addresses',
+            to: `${adminRoot}/admin/dues/addresses`,
           },
         ],
       },

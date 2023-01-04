@@ -49,7 +49,7 @@ const Login = ({ history, loading, error }) => {
       if (values.email !== '' && values.password !== '') {
         // loginUserAction(values, history);
         return auth
-          .signInWithEmailAndPassword(email, password)
+          .signInWithEmailAndPassword(values.email, values.password)
           .then((user) => {
             console.log(user);
             const userId = user.user.uid;

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Card, CardBody, Row } from 'reactstrap';
+import React, { useState, useEffect } from 'react';
+import { Button, Card, CardBody, Row } from 'reactstrap';
 import { Colxx, Separator } from 'components/common/CustomBootstrap';
 import Breadcrumb from 'containers/navs/Breadcrumb';
 import StateButton from 'components/StateButton';
@@ -8,8 +8,34 @@ import { loadStripe } from '@stripe/stripe-js';
 import { connect } from 'react-redux';
 
 const Start = ({ match, currentUser }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [address, setAddress] = useState(null);
+  console.log(currentUser);
 
+  useEffect(() => {
+    let subscription;
+
+    if (currentUser) {
+      subscription = firestore
+        .collection('addresses')
+        .doc(currentUser?.selectedAddress?.value)
+        .onSnapshot((querySnapshot) => {
+          if (querySnapshot.exists) {
+            setAddress({
+              id: querySnapshot.id,
+              ...querySnapshot.data(),
+            });
+            setIsLoading(false);
+          }
+          setIsLoading(false);
+        });
+    }
+    return () => {
+      if (subscription) {
+        subscription();
+      }
+    };
+  }, []);
   const onOneTimeClickHandler = async () => {
     setIsLoading(true);
     return firestore
@@ -66,9 +92,13 @@ const Start = ({ match, currentUser }) => {
                   <p>We collect HOA dues to .... add text here</p>
                   <hr className="my-4" />
                   <p className="lead mb-0">
-                    <StateButton id="hello" onClick={onOneTimeClickHandler}>
-                      Make Payment
-                    </StateButton>
+                    {address?.isDuesExempt ? (
+                      <Button>You are exempted from HOA Dues</Button>
+                    ) : (
+                      <StateButton id="hello" onClick={onOneTimeClickHandler}>
+                        Make Payment
+                      </StateButton>
+                    )}
                   </p>
                 </>
               </CardBody>
