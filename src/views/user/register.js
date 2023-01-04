@@ -132,9 +132,7 @@ const Register = ({ registerUserAction, history }) => {
             <NavLink to="/" className="white">
               <span className="logo-single" />
             </NavLink>
-            <CardTitle className="mb-4">
-              <IntlMessages id="user.register" />
-            </CardTitle>
+            <CardTitle className="mb-4">Sign Up</CardTitle>
             <Form>
               <FormGroup className="form-group has-float-label  mb-4">
                 <Label>
