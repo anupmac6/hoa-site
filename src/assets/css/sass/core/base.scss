@@ -49,7 +49,7 @@ body {
 }
 
 .fixed-background {
-  background: url('/assets/img/login/balloon-lg.jpg') no-repeat center center
+  background: url('/assets/img/login/Entrance.jpg') no-repeat center center
     fixed;
   background-size: cover;
   width: 100%;
@@ -309,6 +309,9 @@ p {
 
 .text-white {
   color: $button-text-color !important;
+}
+.text-black {
+  color: 'black' !important;
 }
 
 .text-extra-small {
